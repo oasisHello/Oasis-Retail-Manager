@@ -1,7 +1,9 @@
 ﻿using Caliburn.Micro;
+using ORMWPFUserInterface.Heplers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +13,12 @@ namespace ORMWPFUserInterface.ViewModels
     {
         private string _userName;
         private string _password;
+        private IAPIHelper _anAPIHelper;
+        public LoginViewModel(IAPIHelper aAPIHelper)
+        {
+            _anAPIHelper = aAPIHelper;
+            
+        }
 
         public string UserName
         {
@@ -19,6 +27,7 @@ namespace ORMWPFUserInterface.ViewModels
             {
                 _userName = value;
                 NotifyOfPropertyChange(() => UserName);
+                NotifyOfPropertyChange(() => CanLogIn);
             }
         }
         public string Password
@@ -28,6 +37,7 @@ namespace ORMWPFUserInterface.ViewModels
             {
                 _password = value;
                 NotifyOfPropertyChange(() => Password);
+                NotifyOfPropertyChange(() => CanLogIn);
             }
         }
 
@@ -44,9 +54,16 @@ namespace ORMWPFUserInterface.ViewModels
 
             }
         }
-        public void LogIn()
+        public async Task LogIn()
         {
-            Console.WriteLine();
+            try
+            {
+                var result = await _anAPIHelper.Authenticate(UserName, Password);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
 

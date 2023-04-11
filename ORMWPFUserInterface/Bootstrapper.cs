@@ -31,7 +31,8 @@ namespace ORMWPFUserInterface
             _simpleContainer.Instance(_simpleContainer);//Note:Initialize the container
             _simpleContainer
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();//Note:singleton means one instance for the life of application
+                .Singleton<IEventAggregator, EventAggregator>()//Note:singleton means one instance for the life of application
+                .Singleton<IAPIHelper, APIHelper>();
 
             GetType().Assembly.GetTypes()// Note:Get all the types in current assembly
                 .Where(type => type.IsClass)
