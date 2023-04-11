@@ -14,8 +14,8 @@ namespace ORMDataManager.Controllers
         // GET api/values
         public IEnumerable<string> Get()
         {
-            string userId = RequestContext.Principal.Identity.GetUserId();//Note: there probably more than one loggin,
-                                                                          //I need to know you more specifically. --ESP03,Verify your user id.
+            string userId = RequestContext.Principal.Identity.GetUserId();//Note: there is probably more than one loggin,
+                                                                          //I need to know you more precisely. --ESP03,Verify your user id.
             return new string[] { "value1", "value2",userId};
         }
 

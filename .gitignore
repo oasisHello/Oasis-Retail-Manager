@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/ORMDataManager/Web.Release.config
+/ORMDataManager/Web.Debug.config
+/ORMDataManager/Web.config
