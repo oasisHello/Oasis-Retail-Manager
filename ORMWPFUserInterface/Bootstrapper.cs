@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using ORMWPFUI.Library.API;
+using ORMWPFUI.Library.Model;
 using ORMWPFUserInterface.Heplers;
 using ORMWPFUserInterface.ViewModels;
 using System;
@@ -31,6 +33,7 @@ namespace ORMWPFUserInterface
             _simpleContainer.Instance(_simpleContainer);//Note:Initialize the container
             _simpleContainer
                 .Singleton<IWindowManager, WindowManager>()
+                .Singleton<ILoggedInUserModel,LoggedInUserModel>()
                 .Singleton<IEventAggregator, EventAggregator>()//Note:singleton means one instance for the life of application
                 .Singleton<IAPIHelper, APIHelper>();
 

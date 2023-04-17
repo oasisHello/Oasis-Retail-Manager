@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ORMWPFUI.Library.API;
 using ORMWPFUserInterface.Heplers;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,34 @@ namespace ORMWPFUserInterface.ViewModels
             }
         }
 
+
+        public bool IsErrorVisible
+        {
+            get 
+            {
+                bool result = false;
+                if(ErrorMessage?.Length > 0)
+                {
+                    result = true;
+                }
+                return result;
+            }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set 
+            { 
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => ErrorMessage);
+                NotifyOfPropertyChange(() => IsErrorVisible);
+            }
+        }
+
+
         public bool CanLogIn
         {
             get
@@ -58,11 +87,15 @@ namespace ORMWPFUserInterface.ViewModels
         {
             try
             {
+                ErrorMessage = "";
                 var result = await _anAPIHelper.Authenticate(UserName, Password);
+
+                //Capture more detailed information of the user.
+                _anAPIHelper.GetLoggedInUserInfo(result.Access_Token);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorMessage = ex.Message;
             }
         }
 

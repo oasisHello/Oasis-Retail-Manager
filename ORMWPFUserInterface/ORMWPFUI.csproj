@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CC899339-601C-4C26-AC10-4FB47802C10D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ORMWPFUserInterface</RootNamespace>
+    <RootNamespace>ORMWPFUI</RootNamespace>
     <AssemblyName>OasisRetailManager</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -87,14 +87,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Heplers\APIHelper.cs" />
-    <Compile Include="Heplers\IAPIHelper.cs" />
     <Compile Include="Heplers\PasswordBoxHelper.cs" />
-    <Compile Include="Models\AuthenticatedUser.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\SalesViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SalesView.xaml.cs">
+      <DependentUpon>SalesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -104,6 +105,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SalesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,6 +144,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ORMWPFUI.Library\ORMWPFUI.Library.csproj">
+      <Project>{64CB1178-2715-4E20-B7CD-EF5F9FBB5B1D}</Project>
+      <Name>ORMWPFUI.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
