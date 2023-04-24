@@ -9,25 +9,18 @@ namespace ORMWPFUI.Library.Model
 {
     public class UIProductModel
     {
-
+        private int _available;
         public int Id { get; set; }
         public string ProductName { get; set; }
         public string Description { get; set; }
         public Decimal RetailPrice { get; set; }
         public int QuantityInStock { get; set; }
-        private int _available;
-
+        public bool IsTaxable { get; set; }
         public int Available
         {
             get { return _available; }
             set { _available = value; }
         }
-
-        public UIProductModel()
-        {
-            _available = QuantityInStock;
-        }
-
         public string DisplayText
         {
             get

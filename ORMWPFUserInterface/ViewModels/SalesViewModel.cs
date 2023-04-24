@@ -1,11 +1,13 @@
 ﻿using Caliburn.Micro;
 using ORMWPFUI.Library.API;
+using ORMWPFUI.Library.Helper;
 using ORMWPFUI.Library.Model;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,15 +16,23 @@ namespace ORMWPFUI.ViewModels
     public class SalesViewModel : Screen
     {
         private IProductEndPoint _productEndPoint;
+        /// <summary>
+        /// Designed to make sure cart items well prepared before assgined to Cart
+        /// </summary>
+        private List<UICartItemModel> _cartItems = new List<UICartItemModel>();
+        private IConfigHelper _configHelper;
+        private decimal _rate;
 
-        public SalesViewModel(IProductEndPoint productEndPoint)
+        public SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper)
         {
             _productEndPoint = productEndPoint;
+            _configHelper= configHelper; 
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
+            _rate = _configHelper.GetTaxRate();
             await LoadProducts();
         }
         public async Task LoadProducts()
@@ -42,9 +52,7 @@ namespace ORMWPFUI.ViewModels
                 NotifyOfPropertyChange(() => Products);
             }
         }
-
         private UIProductModel _selectedProducts;
-
         public UIProductModel SelectedProducts
         {
             get { return _selectedProducts; }
@@ -55,7 +63,6 @@ namespace ORMWPFUI.ViewModels
                 NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
-
         private int _itemQuantity;
         public int ItemQuantity
         {
@@ -67,10 +74,6 @@ namespace ORMWPFUI.ViewModels
                 NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
-        /// <summary>
-        /// Designed to make sure cart items well prepared before assgined to Cart
-        /// </summary>
-        private List<UICartItemModel> _cartItems = new List<UICartItemModel>();
         private BindingList<UICartItemModel> _cart;
         private List<UIProductModel> _productModels;
 
@@ -88,28 +91,49 @@ namespace ORMWPFUI.ViewModels
             get
             {
                 //TODO: Replace with calculation
-                decimal subTotal = 0;
-                foreach (var item in _cartItems)
-                {
-                    subTotal += (item.QuantityInCart * item.Product.RetailPrice);
-                } 
-                return subTotal.ToString("C");
+                return CalculateSubTotal().ToString("C");
             }
         }
+
+        private decimal CalculateSubTotal()
+        {
+            decimal subTotal = 0;
+            foreach (var item in _cartItems)
+            {
+                subTotal += (item.QuantityInCart * item.Product.RetailPrice);
+            }
+            return subTotal;
+        }
+
         public string Tax
         {
             get
             {
                 //TODO: Replace with calculation
-                return $"0.00";
+                return CalculateTax().ToString("C");
             }
         }
+
+        private decimal CalculateTax()
+        {
+            decimal tax = 0;
+            foreach (var item in _cartItems)
+            {
+                if (item.Product.IsTaxable)
+                {
+                    tax += (item.QuantityInCart * item.Product.RetailPrice * _rate) / 100;
+                }
+            }
+            return tax;
+        }
+
         public string Total
         {
             get
             {
                 //TODO: Replace with calculation
-                return $"0.00";
+                decimal total = CalculateSubTotal()+CalculateTax();
+                return total.ToString("C");
             }
         }
         public bool CanAddToCart
@@ -138,6 +162,8 @@ namespace ORMWPFUI.ViewModels
             Cart = new BindingList<UICartItemModel>(_cartItems); //Details:After many trys, this way can help us populate the data to view.
             Products = new BindingList<UIProductModel>(_productModels);
             NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
         }
 
         private void CheckCartItems(UICartItemModel cartItem)

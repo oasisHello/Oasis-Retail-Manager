@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ORMWPFUI.Library.API;
+using ORMWPFUI.Library.Helper;
 using ORMWPFUI.Library.Model;
 using ORMWPFUserInterface.Heplers;
 using ORMWPFUserInterface.ViewModels;
@@ -34,6 +35,7 @@ namespace ORMWPFUserInterface
                 .PerRequest<IProductEndPoint,ProductEndPoint>();//Note:Initialize the container
             _simpleContainer
                 .Singleton<IWindowManager, WindowManager>()
+                .Singleton<IConfigHelper, ConfigHelper>()
                 .Singleton<ILoggedInUserModel,LoggedInUserModel>()
                 .Singleton<IEventAggregator, EventAggregator>()//Note:singleton means one instance for the life of application,
                                                                //Question:Why IEventAggregator is Singleton.Does that mean only one
