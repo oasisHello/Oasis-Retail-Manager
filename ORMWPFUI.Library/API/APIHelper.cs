@@ -17,6 +17,13 @@ namespace ORMWPFUI.Library.API
         private HttpClient _aAPIClient;
         private ILoggedInUserModel _loggedInUser;
 
+        public HttpClient GetHttpClient
+        {
+            get
+            {
+                return _aAPIClient;
+            }
+        }
         public APIHelper(ILoggedInUserModel loggedInUserModel)
         {
             InitializeClient();
@@ -76,5 +83,6 @@ namespace ORMWPFUI.Library.API
                 }
             }
         }
+
     }
 }

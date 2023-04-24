@@ -85,9 +85,13 @@
   <ItemGroup>
     <Compile Include="API\APIHelper.cs" />
     <Compile Include="API\IAPIHelper.cs" />
+    <Compile Include="API\IProductEndPoint.cs" />
+    <Compile Include="API\ProductEndPoint.cs" />
     <Compile Include="Model\AuthenticatedUser.cs" />
+    <Compile Include="Model\UICartItemModel.cs" />
     <Compile Include="Model\ILoggedInUserModel.cs" />
     <Compile Include="Model\LoggedInUserModel.cs" />
+    <Compile Include="Model\UIProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

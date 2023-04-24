@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ORMWPFUI.EventModels;
 using ORMWPFUI.Library.API;
 using ORMWPFUserInterface.Heplers;
 using System;
@@ -15,9 +16,11 @@ namespace ORMWPFUserInterface.ViewModels
         private string _userName;
         private string _password;
         private IAPIHelper _anAPIHelper;
-        public LoginViewModel(IAPIHelper aAPIHelper)
+        private IEventAggregator _events;
+        public LoginViewModel(IAPIHelper aAPIHelper,IEventAggregator events)
         {
             _anAPIHelper = aAPIHelper;
+            _events = events;
             
         }
 
@@ -91,7 +94,10 @@ namespace ORMWPFUserInterface.ViewModels
                 var result = await _anAPIHelper.Authenticate(UserName, Password);
 
                 //Capture more detailed information of the user.
-                _anAPIHelper.GetLoggedInUserInfo(result.Access_Token);
+                await _anAPIHelper.GetLoggedInUserInfo(result.Access_Token);
+                await _events.PublishOnUIThreadAsync(new LogOnEvent());// I'm sure this event will be listened by other UI,
+                                                // this way would not cause any cross thread issue.
+                       
             }
             catch (Exception ex)
             {

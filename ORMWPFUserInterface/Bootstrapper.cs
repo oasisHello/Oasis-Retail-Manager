@@ -30,11 +30,14 @@ namespace ORMWPFUserInterface
 
         protected override void Configure()
         {
-            _simpleContainer.Instance(_simpleContainer);//Note:Initialize the container
+            _simpleContainer.Instance(_simpleContainer)
+                .PerRequest<IProductEndPoint,ProductEndPoint>();//Note:Initialize the container
             _simpleContainer
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<ILoggedInUserModel,LoggedInUserModel>()
-                .Singleton<IEventAggregator, EventAggregator>()//Note:singleton means one instance for the life of application
+                .Singleton<IEventAggregator, EventAggregator>()//Note:singleton means one instance for the life of application,
+                                                               //Question:Why IEventAggregator is Singleton.Does that mean only one
+                                                               //event in our whole application.
                 .Singleton<IAPIHelper, APIHelper>();
 
             GetType().Assembly.GetTypes()// Note:Get all the types in current assembly
