@@ -15,15 +15,12 @@ namespace ORMWPFUserInterface.ViewModels
         private LoginViewModel _loginVM;
         private IEventAggregator _events;
         private SalesViewModel _salesVM;
-        private SimpleContainer _container;
 
-        public  ShellViewModel(LoginViewModel loginVM,IEventAggregator events,SalesViewModel salesViewModel,
-            SimpleContainer simpleContainer)
+        public  ShellViewModel(LoginViewModel loginVM,IEventAggregator events,SalesViewModel salesViewModel)
         {
-            _container = simpleContainer;
             _salesVM= salesViewModel;
             _loginVM = loginVM;// Note:Initialized in Bootstrapper by depenancy injection
-            ActivateItemAsync(_container.GetInstance<LoginViewModel>());//  display by Caliburn.Micro
+            ActivateItemAsync(IoC.Get<LoginViewModel>());//  display by Caliburn.Micro
             _events = events;
             _events.Subscribe(this);// This class subscribes this events.
 

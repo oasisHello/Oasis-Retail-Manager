@@ -32,7 +32,7 @@ namespace ORMWPFUI.ViewModels
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            _rate = _configHelper.GetTaxRate();
+            _rate = _configHelper.GetTaxRate()/100;
             await LoadProducts();
         }
         public async Task LoadProducts()
@@ -117,13 +117,16 @@ namespace ORMWPFUI.ViewModels
         private decimal CalculateTax()
         {
             decimal tax = 0;
-            foreach (var item in _cartItems)
-            {
-                if (item.Product.IsTaxable)
-                {
-                    tax += (item.QuantityInCart * item.Product.RetailPrice * _rate) / 100;
-                }
-            }
+            tax=_cartItems
+                .Where(c => c.Product.IsTaxable)
+                .Sum(c => c.QuantityInCart*c.Product.RetailPrice*_rate) ;
+            //foreach (var item in _cartItems)
+            //{
+            //    if (item.Product.IsTaxable)
+            //    {
+            //        tax += (item.QuantityInCart * item.Product.RetailPrice * _rate) / 100;
+            //    }
+            //}
             return tax;
         }
 

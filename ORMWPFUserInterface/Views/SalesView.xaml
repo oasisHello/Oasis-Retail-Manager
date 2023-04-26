@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ORMWPFUI.Views"
              mc:Ignorable="d" Background="White" FontSize="20"
-             d:DesignHeight="425" d:DesignWidth="800">
+             d:DesignHeight="500" d:DesignWidth="800">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -32,19 +32,26 @@
         <!--Header-->
         <TextBlock Text="Sales" FontSize="45" Margin="0 0 0 20"/>
         <!--Column 0-->
-        <TextBlock Text="Items" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10"/>
+        <TextBlock Text="Items" Grid.Row="1" Grid.Column="0" Margin="40,0,0,0"/>
         <ListBox x:Name="Products" Grid.Row="2" Grid.Column="0"
-                 MinHeight="200" MinWidth="150" Margin="0,0,0,20" SelectedItem="{Binding SelectedProducts}">
+                 MinHeight="200" MinWidth="150" Margin="40,0,0,0" SelectedItem="{Binding SelectedProducts}">
             <ListBox.ItemTemplate>
                 
             <DataTemplate>
-                <TextBlock Text="{Binding DisplayText}">
-                </TextBlock>
+                <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding DisplayText}"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Price:" FontSize="16"></TextBlock>
+                            <TextBlock Text="{Binding RetailPrice,StringFormat='{}{0:C}'}" FontSize="16">
+                       </TextBlock>
+                    </StackPanel>
+                </StackPanel>
             </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
         <!--Column 1-->
-        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" Margin="20,0,20,2">
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" Margin="20,0,20,0">
+
             <TextBlock  Text="Quantity"/>
             <TextBox x:Name="ItemQuantity" MinWidth="100" Margin=" 0 0 0 10"/>
             <Button x:Name="AddToCart" Content="Add to cart" Margin=" 0 0 0 10" Padding="5"/>
@@ -62,7 +69,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <DockPanel Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,0,0">
+        <DockPanel Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,20,0,0">
             <TextBlock  Text="SubTotal: " Margin=" 0 0 15 0"/>
             <TextBlock x:Name="SubTotal" Text="$0.00" TextAlignment="Right"/>
         </DockPanel>
