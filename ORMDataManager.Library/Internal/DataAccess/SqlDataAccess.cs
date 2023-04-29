@@ -32,8 +32,13 @@ namespace ORMDataManager.Library.Internal.DataAccess
             string connectionString = Get(connectionStringName);
             using(IDbConnection conn = new SqlConnection(connectionString))
             {
-                conn.Execute(sqlCommand, parameters, commandType: CommandType.StoredProcedure) ;
+                conn.Execute(sqlCommand, parameters, commandType: commandType) ;
             }
+        }
+
+        internal void SaveData<T>(string sqlCommand, object dBSaleModel, string v, CommandType text)
+        {
+            throw new NotImplementedException();
         }
     }
 }

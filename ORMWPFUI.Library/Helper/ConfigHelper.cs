@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ORMWPFUI.Library.Helper
 {
+    //TODO: move this from config to API
     public class ConfigHelper : IConfigHelper
     {
         public decimal GetTaxRate()

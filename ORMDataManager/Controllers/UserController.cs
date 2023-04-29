@@ -14,7 +14,7 @@ namespace ORMDataManager.Controllers
     [Authorize]
     public class UserController : ApiController
     {
-        public UserModel GetById()
+        public DBUserModel GetById()
         {
             string userId = RequestContext.Principal.Identity.GetUserId();
             UserData data = new UserData();

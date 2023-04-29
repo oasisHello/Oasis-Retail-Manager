@@ -17,16 +17,18 @@ namespace ORMWPFUI.ViewModels
     {
         private IProductEndPoint _productEndPoint;
         /// <summary>
-        /// Designed to make sure cart items well prepared before assgined to Cart
+        /// Designed to make sure cart items well prepared before assgined to Cart(Property)
         /// </summary>
         private List<UICartItemModel> _cartItems = new List<UICartItemModel>();
         private IConfigHelper _configHelper;
+        private ISaleEndPoint _saleEndPoint;
         private decimal _rate;
 
-        public SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndPoint productEndPoint,ISaleEndPoint saleEndPoint, IConfigHelper configHelper)
         {
             _productEndPoint = productEndPoint;
-            _configHelper= configHelper; 
+            _configHelper= configHelper;
+            _saleEndPoint = saleEndPoint;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -37,7 +39,7 @@ namespace ORMWPFUI.ViewModels
         }
         public async Task LoadProducts()
         {
-            _productModels = await _productEndPoint.GetAll();
+            _productModels = await _productEndPoint.GetAllAsync();
             _productModels.ForEach(p => p.Available = p.QuantityInStock);
             Products = new BindingList<UIProductModel>(_productModels);
         }
@@ -167,6 +169,7 @@ namespace ORMWPFUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
         private void CheckCartItems(UICartItemModel cartItem)
@@ -209,16 +212,29 @@ namespace ORMWPFUI.ViewModels
             {
                 bool output = false;
                 // Maka sure something is in the cart
-
+                if(_cartItems.Count > 0)
+                {
+                    output= true;
+                }
                 return output;
             }
         }
 
-        public void CheckOut()
+        public async Task CheckOut()
         {
+            UISaleModel anUISale= new UISaleModel();
+            foreach(var item in _cartItems) 
+            {
+                UISaleDetailModel aSaleDetail = new UISaleDetailModel()
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                };
 
+                anUISale.SaleDetails.Add(aSaleDetail);
+            }
+                await _saleEndPoint.PostSale(anUISale);
         }
-
 
     }
 }

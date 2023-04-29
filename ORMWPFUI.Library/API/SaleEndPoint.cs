@@ -8,27 +8,28 @@ using System.Threading.Tasks;
 
 namespace ORMWPFUI.Library.API
 {
-    public class ProductEndPoint : IProductEndPoint
+    public class SaleEndPoint : ISaleEndPoint
     {
         private IAPIHelper _anAPIHelper;
 
-        public ProductEndPoint(IAPIHelper anAPIHelper)
+        public SaleEndPoint(IAPIHelper anAPIHelper)
         {
             _anAPIHelper = anAPIHelper;
         }
-        public async Task<List<UIProductModel>> GetAllAsync()
+
+        public async Task PostSale(UISaleModel sale)
         {
-            using (HttpResponseMessage response = await _anAPIHelper.GetHttpClient.GetAsync("/api/product"))
+            using (HttpResponseMessage response = await _anAPIHelper.GetHttpClient.PostAsJsonAsync("/api/sale", sale))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsAsync<List<UIProductModel>>();
-                    return result;
+
                 }
                 else
                 {
                     throw new Exception(response.ReasonPhrase);
                 }
+
             }
         }
     }

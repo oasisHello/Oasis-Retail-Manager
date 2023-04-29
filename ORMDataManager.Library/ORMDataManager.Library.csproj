@@ -45,11 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigHelper.cs" />
     <Compile Include="DataAccess\ProductData.cs" />
+    <Compile Include="DataAccess\SaleData.cs" />
     <Compile Include="DataAccess\UserData.cs" />
-    <Compile Include="Models\ProductModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\DBProductModel.cs" />
+    <Compile Include="Models\DBSaleModel.cs" />
+    <Compile Include="Models\DBUserModel.cs" />
     <Compile Include="Internal\DataAccess\SqlDataAccess.cs" />
+    <Compile Include="Models\DBSaleDetailModel.cs" />
+    <Compile Include="Models\SaleDetailModel.cs" />
+    <Compile Include="Models\SaleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

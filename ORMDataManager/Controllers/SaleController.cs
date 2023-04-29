@@ -11,12 +11,13 @@ using System.Web.Http;
 namespace ORMDataManager.Controllers
 {
     [Authorize]
-    public class ProductController : ApiController
+    public class SaleController : ApiController
     {
-        public List<DBProductModel> Get()
+        public void Post(SaleModel sale)
         {
-            ProductData data = new ProductData();
-            return data.GetAll();
+            string userId = RequestContext.Principal.Identity.GetUserId();
+            SaleData saleData = new SaleData();
+            saleData.SaveSale(sale,userId);
 
         }
     }

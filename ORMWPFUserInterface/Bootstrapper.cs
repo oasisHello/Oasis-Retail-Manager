@@ -31,8 +31,10 @@ namespace ORMWPFUserInterface
 
         protected override void Configure()
         {
-            _simpleContainer.Instance(_simpleContainer)
-                .PerRequest<IProductEndPoint,ProductEndPoint>();//Note:Initialize the container
+            _simpleContainer.Instance(_simpleContainer)//Note:Initialize the container
+                .PerRequest<IProductEndPoint, ProductEndPoint>()
+                .PerRequest<ISaleEndPoint, SaleEndPoint>();
+
             _simpleContainer
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IConfigHelper, ConfigHelper>()

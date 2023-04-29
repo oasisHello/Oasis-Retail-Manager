@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ORMDataManager.Library.Models
 {
-    public class ProductModel
+    public class DBProductModel
     {
         /// <summary>
         /// The unique identifier for a given product.

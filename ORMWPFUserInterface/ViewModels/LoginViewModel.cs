@@ -13,8 +13,8 @@ namespace ORMWPFUserInterface.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _userName;
-        private string _password;
+        private string _userName="gongstats@orm.com";
+        private string _password="Pwd12345.";
         private IAPIHelper _anAPIHelper;
         private IEventAggregator _events;
         public LoginViewModel(IAPIHelper aAPIHelper,IEventAggregator events)

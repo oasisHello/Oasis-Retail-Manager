@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace ORMWPFUI.Library.API
 {
-    public interface IProductEndPoint
+    public interface ISaleEndPoint
     {
-        Task<List<UIProductModel>> GetAllAsync();
+        Task PostSale(UISaleModel sale);
     }
 }
