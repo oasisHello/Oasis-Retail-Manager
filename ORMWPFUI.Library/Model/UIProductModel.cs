@@ -16,7 +16,7 @@ namespace ORMWPFUI.Library.Model
         public Decimal RetailPrice { get; set; }
         public int QuantityInStock { get; set; }
         public bool IsTaxable { get; set; }
-        public int Available
+        public int AvailableQuantity
         {
             get { return _available; }
             set { _available = value; }
@@ -25,7 +25,7 @@ namespace ORMWPFUI.Library.Model
         {
             get
             {
-                return $"{ProductName}({Available})";
+                return $"{ProductName}({AvailableQuantity})";
             }
         }
     }

@@ -24,23 +24,23 @@ namespace ORMWPFUI.ViewModels
         private ISaleEndPoint _saleEndPoint;
         private decimal _rate;
 
-        public SalesViewModel(IProductEndPoint productEndPoint,ISaleEndPoint saleEndPoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndPoint productEndPoint, ISaleEndPoint saleEndPoint, IConfigHelper configHelper)
         {
             _productEndPoint = productEndPoint;
-            _configHelper= configHelper;
+            _configHelper = configHelper;
             _saleEndPoint = saleEndPoint;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            _rate = _configHelper.GetTaxRate()/100;
+            _rate = _configHelper.GetTaxRate() / 100;
             await LoadProducts();
         }
         public async Task LoadProducts()
         {
             _productModels = await _productEndPoint.GetAllAsync();
-            _productModels.ForEach(p => p.Available = p.QuantityInStock);
+            _productModels.ForEach(p => p.AvailableQuantity = p.QuantityInStock);
             Products = new BindingList<UIProductModel>(_productModels);
         }
         private BindingList<UIProductModel> _products;
@@ -54,17 +54,30 @@ namespace ORMWPFUI.ViewModels
                 NotifyOfPropertyChange(() => Products);
             }
         }
-        private UIProductModel _selectedProducts;
-        public UIProductModel SelectedProducts
+        private UIProductModel _selectedProduct;
+        public UIProductModel SelectedProduct
         {
-            get { return _selectedProducts; }
+            get { return _selectedProduct; }
             set
             {
-                _selectedProducts = value;
-                NotifyOfPropertyChange(() => SelectedProducts);
+                _selectedProduct = value;
+                NotifyOfPropertyChange(() => SelectedProduct);
                 NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
+        private UICartItemModel _selectedCartItem;
+
+        public UICartItemModel SelectedCartItem
+        {
+            get { return _selectedCartItem; }
+            set
+            {
+                _selectedCartItem = value;
+                NotifyOfPropertyChange(() => SelectedCartItem);
+                NotifyOfPropertyChange(() => CanRemoveFromCart);
+            }
+        }
+
         private int _itemQuantity;
         public int ItemQuantity
         {
@@ -119,9 +132,9 @@ namespace ORMWPFUI.ViewModels
         private decimal CalculateTax()
         {
             decimal tax = 0;
-            tax=_cartItems
+            tax = _cartItems
                 .Where(c => c.Product.IsTaxable)
-                .Sum(c => c.QuantityInCart*c.Product.RetailPrice*_rate) ;
+                .Sum(c => c.QuantityInCart * c.Product.RetailPrice * _rate);
             //foreach (var item in _cartItems)
             //{
             //    if (item.Product.IsTaxable)
@@ -137,7 +150,7 @@ namespace ORMWPFUI.ViewModels
             get
             {
                 //TODO: Replace with calculation
-                decimal total = CalculateSubTotal()+CalculateTax();
+                decimal total = CalculateSubTotal() + CalculateTax();
                 return total.ToString("C");
             }
         }
@@ -148,7 +161,7 @@ namespace ORMWPFUI.ViewModels
                 // Make sure something is selected.
                 // Make sure there is an item quantity.
                 bool output = false;
-                if (ItemQuantity > 0 && SelectedProducts?.Available > ItemQuantity)
+                if (ItemQuantity > 0 && SelectedProduct?.AvailableQuantity > ItemQuantity)
                 {
                     output = true;
                 }
@@ -159,7 +172,7 @@ namespace ORMWPFUI.ViewModels
         {
             UICartItemModel aCartItem = new UICartItemModel()
             {
-                Product = SelectedProducts,
+                Product = SelectedProduct,
                 QuantityInCart = ItemQuantity
             };
             //Make sure before Cart items showed on screen, every cart item should be well prepared.
@@ -173,19 +186,19 @@ namespace ORMWPFUI.ViewModels
         }
 
         private void CheckCartItems(UICartItemModel cartItem)
-        { 
-            var item=_cartItems.FirstOrDefault(c => c.Product.ProductName.Equals(cartItem.Product.ProductName));
+        {
+            var item = _cartItems.FirstOrDefault(c => c.Product.ProductName.Equals(cartItem.Product.ProductName));
             var product = _productModels.FirstOrDefault(p => p.ProductName.Equals(cartItem.Product.ProductName));
-            if (item!=null)
+            if (item != null)
             {
                 item.QuantityInCart += cartItem.QuantityInCart;
-                product.Available -= cartItem.QuantityInCart;
+                product.AvailableQuantity -= cartItem.QuantityInCart;
 
             }
             else
             {
                 _cartItems.Add(cartItem);
-                product.Available -= cartItem.QuantityInCart;
+                product.AvailableQuantity -= cartItem.QuantityInCart;
             }
         }
 
@@ -194,16 +207,36 @@ namespace ORMWPFUI.ViewModels
             get
             {
                 bool output = false;
-
                 // Make sure something is selected.
-
+                if (ItemQuantity > 0 && SelectedCartItem?.QuantityInCart >= ItemQuantity)
+                {
+                    output = true;
+                }
                 return output;
-
             }
         }
 
         public void RemoveFromCart()
         {
+            var product = _productModels.FirstOrDefault(p => p.ProductName.Equals(SelectedCartItem.Product.ProductName));
+            var cart = _cartItems.FirstOrDefault(c => c.Product.ProductName.Equals(SelectedCartItem.Product.ProductName));
+            product.AvailableQuantity += ItemQuantity;
+            bool flag = SelectedCartItem.QuantityInCart == ItemQuantity;
+            if (flag)
+            {
+                _cartItems.Remove(cart);
+            }
+            else
+            {
+                cart.QuantityInCart -= ItemQuantity;
+            }
+            Cart = new BindingList<UICartItemModel>(_cartItems); //Details:After many trys, this way can help us populate the data to view.
+            Products = new BindingList<UIProductModel>(_productModels);
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+
         }
 
         public bool CanCheckOut
@@ -212,9 +245,9 @@ namespace ORMWPFUI.ViewModels
             {
                 bool output = false;
                 // Maka sure something is in the cart
-                if(_cartItems.Count > 0)
+                if (_cartItems.Count > 0)
                 {
-                    output= true;
+                    output = true;
                 }
                 return output;
             }
@@ -222,8 +255,8 @@ namespace ORMWPFUI.ViewModels
 
         public async Task CheckOut()
         {
-            UISaleModel anUISale= new UISaleModel();
-            foreach(var item in _cartItems) 
+            UISaleModel anUISale = new UISaleModel();
+            foreach (var item in _cartItems)
             {
                 UISaleDetailModel aSaleDetail = new UISaleDetailModel()
                 {
@@ -233,7 +266,7 @@ namespace ORMWPFUI.ViewModels
 
                 anUISale.SaleDetails.Add(aSaleDetail);
             }
-                await _saleEndPoint.PostSale(anUISale);
+            await _saleEndPoint.PostSale(anUISale);
         }
 
     }
