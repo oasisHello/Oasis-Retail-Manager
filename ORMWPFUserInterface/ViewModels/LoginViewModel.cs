@@ -45,7 +45,6 @@ namespace ORMWPFUserInterface.ViewModels
             }
         }
 
-
         public bool IsErrorVisible
         {
             get 
@@ -60,7 +59,6 @@ namespace ORMWPFUserInterface.ViewModels
         }
 
         private string _errorMessage;
-
         public string ErrorMessage
         {
             get { return _errorMessage; }
@@ -104,8 +102,5 @@ namespace ORMWPFUserInterface.ViewModels
                 ErrorMessage = ex.Message;
             }
         }
-
-
-
     }
 }

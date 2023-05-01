@@ -17,5 +17,15 @@ namespace ORMWPFUI.Library.Model
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public void LogOffUser()
+        {
+            Token = "";
+            Id = "";
+            FirstName = "";
+            LastName = "";
+            EmailAddress = "";
+            CreatedDate = DateTime.MinValue;
+        }
     }
 }

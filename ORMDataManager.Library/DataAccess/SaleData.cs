@@ -56,18 +56,18 @@ namespace ORMDataManager.Library.DataAccess
 
             };
             //4.Save the sale model
-            string sqlComm1 = "INSERT INTO [dbo].[Sale]([CashierId],[SaleDate],[SubTotal],[Tax],[Total]) VALUES  (@CashierId, @SaleDate,@SubTotal,@Tax,@Total)" +
-                "SELECT @Id=@@Identity";
+            string sqlComm1 = "INSERT INTO [dbo].[Sale]([CashierId],[SaleDate],[SubTotal],[Tax],[Total]) VALUES  (@CashierId, @SaleDate,@SubTotal,@Tax,@Total)";
+
             sql.SaveData<DBSaleModel>(sqlComm1, dbSaleModel, "DefaultConnection", CommandType.Text);
             //5.Get the Id from sale model
-            string sqlComm2 = "SELECT [Id] FROM [dbo].[Sale] WHERE [SaleDate]=@SaleDate AND [CashierId]=@CashierId";
+            string sqlComm2 = " SELECT TOP 1 [Id] FROM [dbo].[Sale] ORDER BY [SaleDate] DESC";
             var saleModelId=sql.LoadData<int,dynamic>(sqlComm2, new { @CashierId = dbSaleModel.CashierId, @SaleDate = dbSaleModel.SaleDate }, "DefaultConnection", CommandType.Text).FirstOrDefault();
             //6.Finish filling the sale detail model;7.Save the sale detail model.
             string sqlComm3 = "INSERT INTO [dbo].[SaleDetail]([SaleId],[ProductId],[Quantity],[PurchasePrice],[Tax])VALUES(@SaleId,@ProductId,@Quantity,@PurchasePrice,@Tax)";
             foreach (var item in dbSaleDetails)
             {
                 item.SaleId = saleModelId;
-                sql.SaveData(sqlComm3, dbSaleDetails, "DefaultConnection", CommandType.Text);
+                sql.SaveData(sqlComm3, item, "DefaultConnection", CommandType.Text);
             }
 
         }

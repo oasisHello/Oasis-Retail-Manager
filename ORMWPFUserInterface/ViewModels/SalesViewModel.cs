@@ -6,6 +6,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -161,7 +162,7 @@ namespace ORMWPFUI.ViewModels
                 // Make sure something is selected.
                 // Make sure there is an item quantity.
                 bool output = false;
-                if (ItemQuantity > 0 && SelectedProduct?.AvailableQuantity > ItemQuantity)
+                if (ItemQuantity > 0 && SelectedProduct?.AvailableQuantity >= ItemQuantity)
                 {
                     output = true;
                 }
@@ -183,6 +184,7 @@ namespace ORMWPFUI.ViewModels
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
             NotifyOfPropertyChange(() => CanCheckOut);
+            NotifyOfPropertyChange(() => CanAddToCart);
         }
 
         private void CheckCartItems(UICartItemModel cartItem)
@@ -267,6 +269,23 @@ namespace ORMWPFUI.ViewModels
                 anUISale.SaleDetails.Add(aSaleDetail);
             }
             await _saleEndPoint.PostSale(anUISale);
+            ResetSalesViewModel();
+        }
+
+        private void ResetSalesViewModel()
+        {
+            _cartItems = new List<UICartItemModel>();
+            Cart = new BindingList<UICartItemModel>(_cartItems);
+            Products= new BindingList<UIProductModel>(_productModels);
+            ItemQuantity = 1;
+            SelectedProduct = null;
+            NotifyOfPropertyChange(() => SelectedCartItem);
+            NotifyOfPropertyChange(() => SelectedProduct);
+            NotifyOfPropertyChange(() => CanRemoveFromCart);
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+
         }
 
     }
