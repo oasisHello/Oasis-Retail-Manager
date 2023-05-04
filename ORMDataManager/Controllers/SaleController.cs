@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace ORMDataManager.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class SaleController : ApiController
     {
         public void Post(SaleModel sale)
@@ -19,6 +19,12 @@ namespace ORMDataManager.Controllers
             SaleData saleData = new SaleData();
             saleData.SaveSale(sale,userId);
 
+        }
+        [Route("GetSalesReport")]
+        public List<DBSaleReportModel> GetSaleReport()
+        {
+            SaleData saleData = new SaleData();
+            return saleData.GetSaleReport();
         }
     }
 }
