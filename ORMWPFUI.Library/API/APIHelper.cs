@@ -17,7 +17,7 @@ namespace ORMWPFUI.Library.API
         private HttpClient _aAPIClient;
         private ILoggedInUserModel _loggedInUser;
 
-        public HttpClient GetHttpClient
+        public HttpClient HttpClient
         {
             get
             {

@@ -10,9 +10,10 @@ using System.Web.Http;
 
 namespace ORMDataManager.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class SaleController : ApiController
     {
+        [Authorize(Roles ="Cashier")]
         public void Post(SaleModel sale)
         {
             string userId = RequestContext.Principal.Identity.GetUserId();
@@ -20,9 +21,18 @@ namespace ORMDataManager.Controllers
             saleData.SaveSale(sale,userId);
 
         }
+        [Authorize(Roles ="Manager,Admin")]
         [Route("GetSalesReport")]
         public List<DBSaleReportModel> GetSaleReport()
         {
+            if (RequestContext.Principal.IsInRole("Manager"))
+            {
+                //TO-DO: do manager stuff
+            }
+            else if(RequestContext.Principal.IsInRole("Admin"))
+            {
+                //TO-DO: do admin stuff
+            }
             SaleData saleData = new SaleData();
             return saleData.GetSaleReport();
         }

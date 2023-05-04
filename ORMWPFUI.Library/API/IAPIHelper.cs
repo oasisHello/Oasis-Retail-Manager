@@ -12,6 +12,6 @@ namespace ORMWPFUI.Library.API
     {
         Task<AuthenticatedUser> Authenticate(string username, string password);
         Task GetLoggedInUserInfo(string token);
-        HttpClient GetHttpClient { get; }
+        HttpClient HttpClient { get; }
     }
 }

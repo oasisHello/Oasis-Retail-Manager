@@ -18,7 +18,7 @@ namespace ORMWPFUI.Library.API
         }
         public async Task<List<UIProductModel>> GetAllAsync()
         {
-            using (HttpResponseMessage response = await _anAPIHelper.GetHttpClient.GetAsync("/api/product"))
+            using (HttpResponseMessage response = await _anAPIHelper.HttpClient.GetAsync("/api/product"))
             {
                 if (response.IsSuccessStatusCode)
                 {

@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace ORMDataManager.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Cashier,Manager,Admin")]
     public class ProductController : ApiController
     {
         public List<DBProductModel> Get()

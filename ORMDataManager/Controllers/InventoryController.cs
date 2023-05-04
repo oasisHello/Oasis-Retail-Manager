@@ -12,11 +12,13 @@ namespace ORMDataManager.Controllers
     [Authorize]
     public class InventoryController : ApiController
     {
+        [Authorize(Roles ="Manager,Admin")]
         public List<DBInventoryModel> Get()
         {
             InventoryData inventory = new InventoryData();
             return inventory.GetAll();
         }
+        [Authorize(Roles ="Admin")]
         public void Post(DBInventoryModel item)
         {
             InventoryData inventory = new InventoryData();

@@ -19,7 +19,7 @@ namespace ORMWPFUI.Library.API
 
         public async Task PostSale(UISaleModel sale)
         {
-            using (HttpResponseMessage response = await _anAPIHelper.GetHttpClient.PostAsJsonAsync("/api/sale", sale))
+            using (HttpResponseMessage response = await _anAPIHelper.HttpClient.PostAsJsonAsync("/api/sale", sale))
             {
                 if (response.IsSuccessStatusCode)
                 {
