@@ -6,11 +6,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ORMWPFUI.ViewModels
 {
@@ -23,20 +25,40 @@ namespace ORMWPFUI.ViewModels
         private List<UICartItemModel> _cartItems = new List<UICartItemModel>();
         private IConfigHelper _configHelper;
         private ISaleEndPoint _saleEndPoint;
+        private StatusInfoViewModel _status;
+        private IWindowManager _window;
         private decimal _rate;
 
-        public SalesViewModel(IProductEndPoint productEndPoint, ISaleEndPoint saleEndPoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndPoint productEndPoint, ISaleEndPoint saleEndPoint, 
+            IConfigHelper configHelper, StatusInfoViewModel status,IWindowManager window)
         {
             _productEndPoint = productEndPoint;
             _configHelper = configHelper;
             _saleEndPoint = saleEndPoint;
+            _status = status;
+            _window = window;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
             _rate = _configHelper.GetTaxRate() / 100;
-            await LoadProducts();
+            try
+            {
+                await LoadProducts();
+            }
+            catch (Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+                settings.WindowStartupLoaction = WindowStartupLocation.CenterScreen;
+                settings.ResizeMode=ResizeMode.NoResize;
+                settings.Title = "System Error";
+
+                _status.UpdateMessage("Unauthorized  access", "don't have the permission to access to the sale form");
+                _window.ShowDialogAsync(_status,null,null);
+
+                throw;
+            }
         }
         public async Task LoadProducts()
         {
@@ -276,7 +298,7 @@ namespace ORMWPFUI.ViewModels
         {
             _cartItems = new List<UICartItemModel>();
             Cart = new BindingList<UICartItemModel>(_cartItems);
-            Products= new BindingList<UIProductModel>(_productModels);
+            Products = new BindingList<UIProductModel>(_productModels);
             ItemQuantity = 1;
             SelectedProduct = null;
             NotifyOfPropertyChange(() => SelectedCartItem);
