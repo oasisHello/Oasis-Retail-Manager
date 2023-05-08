@@ -4,6 +4,7 @@ using ORMWPFUI.Library.Model;
 using ORMWPFUI.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -13,15 +14,15 @@ namespace ORMWPFUserInterface.ViewModels
 {
     public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>
     {
-        private LoginViewModel _loginVM;
+        private UserRoleViewModel _userRole;
         private IEventAggregator _events;
         private SalesViewModel _salesVM;
         private ILoggedInUserModel _user;
 
-        public  ShellViewModel(LoginViewModel loginVM,IEventAggregator events,SalesViewModel salesViewModel,ILoggedInUserModel user)
+        public  ShellViewModel(IEventAggregator events,SalesViewModel salesViewModel,ILoggedInUserModel user,UserRoleViewModel userRole)
         {
             _salesVM= salesViewModel;
-            _loginVM = loginVM;// Note:Initialized in Bootstrapper by depenancy injection
+            //_loginVM = loginVM;// Note:Initialized in Bootstrapper by depenancy injection
             _user = user;
             ActivateItemAsync(IoC.Get<LoginViewModel>());//  display by Caliburn.Micro
             _events = events;
@@ -57,6 +58,11 @@ namespace ORMWPFUserInterface.ViewModels
             _user.LogOffUser();
             NotifyOfPropertyChange(()=> IsAccountVisible);
             ActivateItemAsync(IoC.Get<LoginViewModel>());//  display by Caliburn.Micro
+        }
+        public async Task UserManage()
+        {
+            //await ActivateItemAsync(IoC.Get<LoginViewModel>());
+            await ActivateItemAsync(IoC.Get<UserRoleViewModel>());
         }
     }
 }

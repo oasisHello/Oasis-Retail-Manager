@@ -87,8 +87,10 @@
     <Compile Include="API\IAPIHelper.cs" />
     <Compile Include="API\IProductEndPoint.cs" />
     <Compile Include="API\ISaleEndPoint.cs" />
+    <Compile Include="API\IUserRoleEndpoint.cs" />
     <Compile Include="API\ProductEndPoint.cs" />
     <Compile Include="API\SaleEndPoint.cs" />
+    <Compile Include="API\UserRoleEndpoint.cs" />
     <Compile Include="Helper\ConfigHelper.cs" />
     <Compile Include="Helper\IConfigHelper.cs" />
     <Compile Include="Model\AuthenticatedUser.cs" />
@@ -98,6 +100,8 @@
     <Compile Include="Model\ILoggedInUserModel.cs" />
     <Compile Include="Model\LoggedInUserModel.cs" />
     <Compile Include="Model\UIProductModel.cs" />
+    <Compile Include="Model\UIUserRoleModel.cs" />
+    <Compile Include="Model\UIUserRolePairModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ namespace ORMDataManager.Controllers
     [Authorize]
     public class SaleController : ApiController
     {
-        [Authorize(Roles ="Cashier")]
+        [Authorize(Roles ="Cashier,Admin")]
         public void Post(SaleModel sale)
         {
             string userId = RequestContext.Principal.Identity.GetUserId();

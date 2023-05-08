@@ -57,8 +57,10 @@
     <Compile Include="Models\DBUserModel.cs" />
     <Compile Include="Internal\DataAccess\SqlDataAccess.cs" />
     <Compile Include="Models\DBSaleDetailModel.cs" />
+    <Compile Include="Models\DBUserRoleModel.cs" />
     <Compile Include="Models\SaleDetailModel.cs" />
     <Compile Include="Models\SaleModel.cs" />
+    <Compile Include="Models\UserRolePairModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

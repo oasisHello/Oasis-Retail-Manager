@@ -14,6 +14,10 @@
             <MenuItem Header="_Account" Visibility="{Binding IsAccountVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <MenuItem x:Name="Logout" Header="_Logout" />
             </MenuItem>
+            <MenuItem Header="UserRole">
+                <MenuItem x:Name="UserManage" Header="_Management"/>
+            </MenuItem>
+            
         </Menu>
         <Grid>
             <ContentControl x:Name="ActiveItem" Margin="20 5 20 20"></ContentControl>

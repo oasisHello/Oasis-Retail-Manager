@@ -33,7 +33,8 @@ namespace ORMWPFUserInterface
         {
             _simpleContainer.Instance(_simpleContainer)//Note:Initialize the container
                 .PerRequest<IProductEndPoint, ProductEndPoint>()
-                .PerRequest<ISaleEndPoint, SaleEndPoint>();
+                .PerRequest<ISaleEndPoint, SaleEndPoint>()
+                .PerRequest<IUserRoleEndpoint,UserRoleEndpoint>();
 
             _simpleContainer
                 .Singleton<IWindowManager, WindowManager>()

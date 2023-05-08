@@ -57,7 +57,6 @@ namespace ORMWPFUI.ViewModels
                 _status.UpdateMessage("Unauthorized  access", "don't have the permission to access to the sale form");
                 _window.ShowDialogAsync(_status,null,null);
 
-                throw;
             }
         }
         public async Task LoadProducts()
