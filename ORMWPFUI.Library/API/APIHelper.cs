@@ -14,6 +14,7 @@ namespace ORMWPFUI.Library.API
 {
     public class APIHelper:IAPIHelper
     {
+
         private HttpClient _aAPIClient;
         private ILoggedInUserModel _loggedInUser;
 
@@ -43,7 +44,7 @@ namespace ORMWPFUI.Library.API
             {
                 new KeyValuePair<string, string>("grant_type", "password"),
                 new KeyValuePair<string, string>("username",username),
-                new KeyValuePair<string, string>("password",password),
+                        new KeyValuePair<string, string>("password",password),
             });
             using (HttpResponseMessage reponse = await _aAPIClient.PostAsync("/Token", data))
             {

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ORMWPFUI.EventModels;
+using ORMWPFUI.Library.API;
 using ORMWPFUI.Library.Model;
 using ORMWPFUI.ViewModels;
 using System;
@@ -18,12 +19,14 @@ namespace ORMWPFUserInterface.ViewModels
         private IEventAggregator _events;
         private SalesViewModel _salesVM;
         private ILoggedInUserModel _user;
+        private IAPIHelper _anAPIHelper;
 
-        public  ShellViewModel(IEventAggregator events,SalesViewModel salesViewModel,ILoggedInUserModel user,UserRoleViewModel userRole)
+        public  ShellViewModel(IEventAggregator events,SalesViewModel salesViewModel,ILoggedInUserModel user,UserRoleViewModel userRole,IAPIHelper anAPIHelper)
         {
             _salesVM= salesViewModel;
             //_loginVM = loginVM;// Note:Initialized in Bootstrapper by depenancy injection
             _user = user;
+            _anAPIHelper = anAPIHelper;
             ActivateItemAsync(IoC.Get<LoginViewModel>());//  display by Caliburn.Micro
             _events = events;
             _events.Subscribe(this);// This class subscribes this events.
@@ -55,7 +58,8 @@ namespace ORMWPFUserInterface.ViewModels
 
         public void Logout()
         {
-            _user.LogOffUser();
+            _user.Reset(); //Clear user information
+            _anAPIHelper.LogOffUser();//Clear connection information
             NotifyOfPropertyChange(()=> IsAccountVisible);
             ActivateItemAsync(IoC.Get<LoginViewModel>());//  display by Caliburn.Micro
         }

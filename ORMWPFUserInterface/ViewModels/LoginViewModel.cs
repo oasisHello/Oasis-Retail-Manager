@@ -94,8 +94,9 @@ namespace ORMWPFUserInterface.ViewModels
                 //Capture more detailed information of the user.
                 await _anAPIHelper.GetLoggedInUserInfo(result.Access_Token);
                 await _events.PublishOnUIThreadAsync(new LogOnEvent());// I'm sure this event will be listened by other UI,
-                                                // this way would not cause any cross thread issue.
-                       
+                //this way would not cause any cross thread issue.
+
+
             }
             catch (Exception ex)
             {

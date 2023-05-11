@@ -18,7 +18,7 @@ namespace ORMWPFUI.Library.Model
         public string EmailAddress { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public void LogOffUser()
+        public void Reset()
         {
             Token = "";
             Id = "";

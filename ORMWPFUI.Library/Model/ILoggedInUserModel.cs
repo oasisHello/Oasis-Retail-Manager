@@ -11,6 +11,6 @@ namespace ORMWPFUI.Library.Model
         string LastName { get; set; }
         string Token { get; set; }
 
-        void LogOffUser();
+        void Reset();
     }
 }

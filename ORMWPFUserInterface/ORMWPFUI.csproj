@@ -159,7 +159,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Views\App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ORMWPFUI.Library\ORMWPFUI.Library.csproj">
